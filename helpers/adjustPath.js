@@ -1,8 +1,8 @@
 //@flow
 
-import { AdjustmentObject } from './alterCoordinate';
+import type { Adjustments } from './alterCoordinates';
 
-const processPath = <T>(p: Array<mixed>): string => (adjustments: AdjustmentObject): T => {
+const processPath = (p: Array<*>) => (adjustments: Adjustments) => {
     const { adjustX , adjustY } = adjustments;
     switch (p[0]) {
       case "C":
@@ -16,10 +16,11 @@ const processPath = <T>(p: Array<mixed>): string => (adjustments: AdjustmentObje
     }
   }
 
-export default function returnPath <T> (
-  adjustments: AdjustmentObject): T {
-  return function (pathAry: Array<mixed>):Array<string> {
+export default function returnPath (
+  adjustments: Adjustments) {
+  return (
+    function (pathAry: string[][]):Array<*> {
     const adjustedPath = processPath(adjustments);
-    return pathAry.map(adjustedPath);
-  }
+    return pathAry.map(adjustedPath)
+  })
 }

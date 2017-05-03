@@ -1,10 +1,6 @@
 
 
-function <T> ({svgData, children}: {width: number, height: number}, {children: mixed}):T {
- return (
-   <Svg/>
- )
-}
+import React from 'react';
 
 
 const Bubble = (props: Object) => {

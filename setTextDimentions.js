@@ -14,7 +14,7 @@ export type textConfig = [{
   }}
 ];
 
-export default function (props?: Object<mixed>): textConfig {
+export default function (props?: mixed[]): textConfig {
 
   //methods
   const startingPos: number = (props.position) === 'below' ? 58 : 36;

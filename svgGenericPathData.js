@@ -1,5 +1,5 @@
 //@flow
-const pathData: Array<object> = [
+const pathData: {}[] = [
   {"M": [0, 30]},
   {"C": [[0,23.375],[5.370,18],[12,18]]},
   {"L": [36,18]},

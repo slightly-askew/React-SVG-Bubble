@@ -4,6 +4,15 @@
 import styled from 'styled-components';
 import { onlyUpdateForKeys } from 'recompose';
 
+//type
+type Props = {
+  underline: {
+    x: number,
+    y: number,
+    width: (string) => number
+  }
+}
+
 const enhance = onlyUpdateForKeys(['config', 'chilid'])
 
 export default enhance(styled.rect`
@@ -15,7 +24,7 @@ export default enhance(styled.rect`
   will-change: transform;
   transition: transform 0.2s ease-out;
 
-  ${({ underline }: Object<mixed>, child:string):string => `
+  ${({ underline }:Props, child:string):string => `
 
     x: ${underline.x};
     y: ${underline.y};

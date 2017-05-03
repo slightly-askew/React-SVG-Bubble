@@ -9,11 +9,11 @@ import adjustPaths from './helpers/adjustPath';
 import alterCoordinates from './helpers/alterCoordinates';
 
 //types
-import AdjustmentObject from './helpers/alterCoordinates';
+import Adjustments from './helpers/alterCoordinates';
 
 //return the new svg path data
 export default function (
-  pathData: Array<mixed>, adjustments : AdjustmentObject
+  pathData: Array<mixed>, adjustments : Adjustments
 ): string {
   const returnPathAsString = (a: Array<string>): string => a.join(' ');
 
