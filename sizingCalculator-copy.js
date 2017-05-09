@@ -4,55 +4,87 @@ import { compose } from 'recompose';
 import rowDataShape from './helpers/createRowDataShape';
 
 type Props = {
-  listOfChildren: Array<string>,
+  children: Array<string | [
+  string, {
+    target: string
+  }
+  ]>,
   characterWidth: number,
   minTextWidth: number,
-  paddingLrg: number,
-  paddingSml: number,
   textSize: number,
   textMargin: number,
-  columns: number
+  columns: number,
+  textDimensions: {
+    x: number,
+    y: number
+  }
 }
 
 export default function ({
-  listOfChildren,
+  children,
   characterWidth,
   minTextWidth,
-  paddingLrg,
-  paddingSml,
+  //paddingLrg,
+  //paddingSml,
   textSize,
   textMargin,
-  columns = 1
-}:Props): {
+  columns,
+  textDimensions,
+
+  }: Props ): {
+
   offsetX: number,
   offsetY: number
-} {
+  } {
+
+  const lineHeight: number = (
+
+    textSize + textMargin
+  )
 
 /*------------------------------------*\
   #GENERIC METHODS
 \*------------------------------------*/
 
-  const lineHeight:number = textSize + textMargin;
+  const numberOfLines = (
+    list: mixed[] ): number => (
 
-  const numberOfLines = (list: mixed[]):number => list.length;
+    list.length
+  );
 
-  const getLengthOfItem = (item: string):number => item.length;
+  const getLengthOfItem = (
+    item: string ): number => (
 
-  const makeListOfLengths = (list: string[]): number[] => (
-    list.map(getLengthOfItem));
+    item.length
+  );
 
-  const extraLines = (lines:number):number => (lines - 1) * lineHeight;
+  const makeListOfLengths = (
+    list: string[] ): number[] => (
 
-  const findLargestItem = (list: number[]):number => Math.max(...list);
+    list.map( getLengthOfItem )
+  );
+
+  const extraLines = ( lines: number ): number => (
+
+    (lines - 1) * lineHeight
+  );
+
+  const findLargestItem = ( list: number[] ): number => (
+
+    Math.max(...list)
+  );
 
   // Column gaps
 
-  const gapBetweenColumns = (paddingSml * 2) + characterWidth;
+  const gapBetweenColumns = ( paddingSml * 2 ) + characterWidth;
   const numberOfGaps = columns - 1;
   const addColumnGaps = numberOfGaps * gapBetweenColumns;
 
-  const findWidth = (n: number): number => (
-    n * characterWidth + (columns > 1) ? addColumnGaps : 0
+  const findWidth = ( n: number ): number => (
+
+    n * characterWidth +
+      columns > 1 ?
+      addColumnGaps : 0
   );
 
   /* End Generic Methods */
@@ -83,20 +115,20 @@ export default function ({
  /* end column logic */
 
 /*------------------------------------*\
-  #MEASURING DIMENSIONS
+  #MEASURING OFFSETS
 \*------------------------------------*/
 
-  const measureExtraWidth = (min: number) => (textWidth: number):number => {
-    return (
-      (textWidth > min) ?
-      textWidth - min :
-      0
-    )}
+  const measureExtraWidth = ( min: number ) => (
+    textWidth: number ): number => (
 
-  const measureExtraHeight = (textLines:number):number => (
-      (textLines > 0) ?
-      paddingLrg + extraLines(textLines) :
-      0
+      textWidth > min ?
+      textWidth - min : 0
+    )
+
+  const measureExtraHeight = ( textLines: number ): number => (
+
+      textLines ?
+      paddingLrg + extraLines(textLines) : 0
   );
 
   /* end measuring dimensions */
@@ -105,37 +137,41 @@ export default function ({
     #COMPOSITION
   \*------------------------------------*/
 
-  const widthRequiredForColumns = compose(
+  const widthRequiredForColumns = compose (
+
       getMaximumColumnCharCounts,
       rowDataShape(columns)
   )
 
-  const widthRequiredForSingleton = compose(
+  const widthRequiredForSingleton = compose (
+
       findLargestItem,
       makeListOfLengths
   )
 
   const getNumberOfCharacters = (
-    ( columns > 1 ) ?
-    widthRequiredForColumns :
-    widthRequiredForSingleton
+
+    columns > 1 ?
+    widthRequiredForColumns : widthRequiredForSingleton
   );
 
-  const xOffset: <A>()=>A = compose(
+  const xOffset: <A>()=>A = compose (
+
     measureExtraWidth(minTextWidth),
     findWidth,
     getNumberOfCharacters
   )
 
-  const yOffset: <A>()=>A = compose(
+  const yOffset: <A>()=>A = compose (
+
     measureExtraHeight,
     linesAccountingForColumns,
     numberOfLines
   )
 
-  const measure = (
-    func: () => number):number => (
-      func(listOfChildren)
+  const measure = ( func: () => number ): number => (
+
+      func( children )
   )
 
 /*------------------------------------*\
@@ -143,6 +179,8 @@ export default function ({
 \*------------------------------------*/
 
   return ({
+
     offsetX: measure(xOffset),
     offsetY: measure(yOffset),
+
   })}

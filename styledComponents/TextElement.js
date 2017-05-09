@@ -6,13 +6,10 @@ import { onlyUpdateForKeys } from 'recompose';
 const enhance = onlyUpdateForKeys(['config','i']);
 
 export default enhance(styled.text`
-  ${(
-    { textElement }:{ textElement: {x: number, y: () => number}},
-     i: number
-  ): string => `
+  ${({origin}): string => `
 
-    x: ${textElement.x};
-    y: ${textElement.y(i)};
+    x: ${origin.x};
+    y: ${origin.y};
 
   `}
 `)

@@ -4,18 +4,21 @@
 import styled from 'styled-components';
 import { onlyUpdateForKeys } from 'recompose';
 
-//props
-type Props = {
-  config : {
-    origin: [number,number],
-    r: number
-  },
+//files
+import findRadius from '../helpers/findRadius';
+import alterCoordinates from '../helpers/alterCoordinates';
+
+
+//type
+type props = {
+  dimensions: {'x': number, 'y': number},
+  origin: {'x': number, 'y': number},
   isActive: boolean
 }
 
 
 //hoc
-const enhance: ()=>React$Component<*> = onlyUpdateForKeys(['config', 'isActive']);
+const enhance: ()=>Class<React$Component<*>> = onlyUpdateForKeys(['dimensions', 'origin', 'isActive']);
 
 export default enhance(styled.circle`
 
@@ -24,23 +27,24 @@ export default enhance(styled.circle`
     will-change: transform;
     transition: transform 0.2s ease-out 0.1s;
 
-    ${({config}: Props):string => {
-      const cx = config.origin[0];
-      const cy = config.origin[1];
+    ${({dimensions, origin, ...props}: props):string => {
+
+      const newOrigin = alterCoordinates(dimensions, props)(origin);
+
+      const cx = newOrigin['x'];
+      const cy = newOrigin['y'];
 
       return `
 
         cx: ${cx};
         cy: ${cy};
-        r: ${config.r};
+        r: ${findRadius(dimensions, [cx,cy])};
         transform-origin: ${cx}px ${cy}px
 
     `}}
 
-    ${({isActive}: Props) => `
+    ${({isActive}: props) => `
 
       transform: scale(1)
-
     `}
-
 `)

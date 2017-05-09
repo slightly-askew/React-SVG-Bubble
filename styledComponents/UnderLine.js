@@ -6,11 +6,11 @@ import { onlyUpdateForKeys } from 'recompose';
 
 //type
 type Props = {
-  underline: {
+  origin: {
     x: number,
     y: number,
-    width: (string) => number
-  }
+  },
+  width: number
 }
 
 const enhance = onlyUpdateForKeys(['config', 'chilid'])
@@ -24,11 +24,11 @@ export default enhance(styled.rect`
   will-change: transform;
   transition: transform 0.2s ease-out;
 
-  ${({ underline }:Props, child:string):string => `
+  ${({ origin, width }:Props, child:string):string => `
 
-    x: ${underline.x};
-    y: ${underline.y};
-    width: ${underline.width(child)};
+    x: ${origin.x};
+    y: ${origin.y + 4.5};
+    width: ${width};
 
   `}
 `);

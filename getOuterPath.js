@@ -5,25 +5,35 @@ import { compose } from 'recompose';
 
 //helpers
 import flattenPathDataIntoTuples from './helpers/flattenPathData';
-import adjustPaths from './helpers/adjustPath';
-import alterCoordinates from './helpers/alterCoordinates';
+import adjustPath from './helpers/adjustPath';
+import asyncCoordinateHandler from './helpers/asyncCoordinateHandler';
 
 //types
-import Adjustments from './helpers/alterCoordinates';
+type coordinates = {
+  'x': number,
+  'y': number
+}
+
+type props = {
+  morph: boolean,
+  flip: coordinates,
+  dimensions: coordinates,
+  offsets: coordinates,
+  thresholds: coordinates
+}
 
 //return the new svg path data
-export default function (
-  pathData: Array<mixed>, adjustments : Adjustments
-): string {
-  const returnPathAsString = (a: Array<string>): string => a.join(' ');
+export default function (pathData: Array<mixed>, props : props): string {
+
+  const returnPathAsString = (a: Array<string>): string => (
+
+    a.join(' ')
+  );
 
   const processPath: <T>()=>T = compose(
-
-    //TL;DR
     returnPathAsString,
-    adjustPaths(alterCoordinates(adjustments)),
+    adjustPath(asyncCoordinateHandler(props)),
     flattenPathDataIntoTuples
-
   );
 
   return processPath(pathData);

@@ -1,18 +1,22 @@
+//@flow
 
+//vendor
+import { compose } from 'recompose';
 
-import React from 'react';
+//files
+import Bubble from './Bubble';
+import applyConfig from './hoc/applyConfig';
+import offsetCalculator from './hoc/offsetCalculator';
+import transformCalculator from './hoc/transformCalculator';
+import textCalculator from './hoc/textCalculator';
+import originCalculator from './hoc/originCalculator';
 
+const addData = compose(
+  originCalculator,
+  transformCalculator,
+  offsetCalculator,
+  textCalculator,
+  applyConfig
+)
 
-const Bubble = (props: Object) => {
-  const bubbleData = props.bubbleData;
-  return(
-    <BubbleSvg {...props}>
-      <mask id='circleMask'>
-        <rect height="100%" width="100%" x="0" y="0" fill="#000"/>
-        <MagicCircle bubbleData={bubbleData} position={props.position} />
-      </mask>
-      <BubblePath bubbleData={bubbleData} position={props.position} transform="scale(1)" mask="url(#circleMask)"/>
-      <ListItems bubbleData={bubbleData} position={props.position} />
-    </BubbleSvg>
-  )
-}
+export default addData(Bubble);

@@ -1,25 +1,67 @@
 //@flow
 
-const rowIndex = (i:number, numberOfColumns: number):number => (
-  i * numberOfColumns
-);
+import { compose } from 'recompose';
 
-const measuredSlice = (i:number, list:string[], columns: number):string[] => (
-  list.slice(i, i + columns)
-);
+const getColumnSize = (list: Array<mixed>, numColumns: number): {
 
-const newSlice = (i:number) => (list: string[], numberOfColumns: number) => (
-  measuredSlice(i, list, numberOfColumns)
-);
+  list: Array<mixed>,
+  colSize: number
 
-const sliceIntoRows = (numberOfColumns: number) => (
-  acc, _, i:number, list:string[]
-  ) => {
-  const row = newSlice(rowIndex(i, numberOfColumns));
-  return acc.concat([row(list, numberOfColumns)]);
+} => ({
+  list: list,
+  colSize: Math.ceil(list.length / numColumns)
+});
+
+const getRowSize = ({ list, colSize }:{
+
+  list: Array<mixed>,
+  colSize: number
+}): {
+  list: Array<mixed>,
+  rowSize: number
+
+} => ({
+  list: list,
+  rowSize: Math.ceil(list.length / colSize)
+});
+
+const splitListIntoRows = ({ list, rowSize }: {
+
+  list: Array<mixed>,
+  rowSize: number
+}): {
+  shape: Array<mixed>,
+  rowSize: number
+
+} => {
+
+  let rowList = [];
+
+  for (let i = 0; i < rowSize; i++) {
+
+    const rowStart = i * rowSize;
+    const rowFin = i * rowSize + rowSize;
+
+    rowList.push(list.slice(rowStart,rowFin))
+  }
+
+  return ({
+    shape: rowList,
+    rowSize: rowSize
+    });
 }
 
-export default function (numberOfColumns: number) {
-  return ( list: string[]): string[][] => (
-  list.reduce(sliceIntoRows(numberOfColumns), [])
-)}
+const createRowDataShape = compose(
+
+  splitListIntoRows,
+  getRowSize,
+  getColumnSize
+)
+
+export default (list: Array<any>, numColumns: number): {
+  shape: Array<mixed>,
+  rowSize: number
+  } => (
+
+  createRowDataShape(list, numColumns)
+)

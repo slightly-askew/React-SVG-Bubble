@@ -2,7 +2,7 @@
 
 
 //type def
-export type textConfig = [{
+type textConfig = [{
   textElement : {
     x: number,
     y: (i: number) => number
@@ -13,21 +13,36 @@ export type textConfig = [{
     width: (child: string) => number
   }}
 ];
+type Props = {
+  firstItemY: number,
+  firstItemX: number,
+  textHeight: number,
+  verticalMargin: number,
+  columns: number,
+  characterWidth: number,
+  speachDirection: String<'up' | 'down' | 'left' | 'right'>,
+  children: Array<string | [string, {target: string}]>
+}
 
-export default function (props?: mixed[]): textConfig {
+export default function ({
+  firstItemY,
+  firstItemX,
+  textHeight,
+  verticalMargin,
+  columns,
+  characterWidth,
+  speachDirection,
+  children
+}: Props): textConfig {
 
   //methods
-  const startingPos: number = (props.position) === 'below' ? 58 : 36;
-  const textHeight: number  = 36;
-  const middleMargin: number  = 9;
-  const characterLength: number  = 10;
   const fitToWidth = (child: string):number => (
-    characterLength * child.length
+    characterWidth * child.length
   )
   const yPos = (i: number, adj: number = 0): number => (
-    startingPos +
+    firstItemY +
     (i * textHeight) +
-    (i * middleMargin) +
+    (i * verticalMargin) +
     adj
   );
   const adjustedYPos = (adjustment: number) => (i) => yPos(i, adjustment);

@@ -1,7 +1,13 @@
 //@flow
 
-const flattenObject = (a, o): Array<mixed> => a.concat(Object.entries(o));
+const flattenObject = (a: mixed[], o: {"C": mixed}): mixed[] => (
 
-const flattenAryOfObjects = (ary: Array<Object>): Array<mixed> => ary.reduce(flattenObject, []);
+  a.concat( Object.entries(o) )
+);
+
+const flattenAryOfObjects = (a: Array<{"C": mixed}>): mixed[] => (
+
+  a.reduce( flattenObject , [] )
+);
 
 export default flattenAryOfObjects;
