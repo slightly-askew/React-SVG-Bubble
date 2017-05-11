@@ -24,9 +24,10 @@ export const flip = (dimensions: coordinates) => (...axis: Array<Axis>) => (coor
     dimensions[axis] - coordinates[axis]
   )
 
-  const newCoords = axis.reduce((obj, key): any => (
-    obj[key] = flipCoordinate(key)
-  ), {})
+  const newCoords = axis.reduce((obj, key): any => {
+    obj[key] = flipCoordinate(key);
+    return obj;
+  }, {})
 
   return (
     Object.assign({}, coordinates, newCoords)
@@ -35,36 +36,33 @@ export const flip = (dimensions: coordinates) => (...axis: Array<Axis>) => (coor
 
 export const flipPosition = (svgDimensions: coordinates, selfDimensions: coordinates) => (...axis: Array<Axis>) => (coordinates: coordinates): coordinates => {
 
+
   const flipPosition = (axis) => (
     svgDimensions[axis] - coordinates[axis] - selfDimensions[axis]
   )
 
-  const flippedPositions = axis.reduce((obj, key): any => (
+  const flippedPositions = axis.reduce((obj, key): any => {
     obj[key] = flipPosition(key)
-  ), {})
+    return obj;
+  }, {})
 
   return (
     Object.assign({}, coordinates, flippedPositions)
   )
 }
 
-export const offsetPath = ({offsets, thresholds = {x: 0, y:0}}: {thresholds: coordinates, offsets: coordinates}) => (...axis: string[]) =>
+export const offsetPath = (pathOffsets: coordinates, thresholds: coordinates = {x: 0, y:0}) =>
   (coordinates: coordinates): coordinates => {
 
   const offsetCoordinate = (axis) => (
 
     coordinates[axis] > thresholds[axis] ?
-    coordinates[axis] + offsets[axis] :
+    coordinates[axis] + pathOffsets[axis] :
     coordinates[axis]
   );
 
-  const offsetCoordinates = axis.reduce((obj, key) => (
-    obj[key] = offsetCoordinate(key)
-  ),{})
-
-
-
-  return (
-    Object.assign({}, coordinates, offsetCoordinates)
-  )
+  return ({
+    'x': offsetCoordinate('x'),
+    'y': offsetCoordinate('y')
+  })
 }

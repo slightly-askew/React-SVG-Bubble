@@ -2,42 +2,31 @@
 
 import { compose } from 'recompose';
 
-const getColumnSize = (list: Array<mixed>, numColumns: number): {
+const getColSize = (list: Array<any>, numColumns: number): {
 
-  list: Array<mixed>,
+  list: Array<any>,
   colSize: number
 
 } => ({
   list: list,
-  colSize: Math.ceil(list.length / numColumns)
+  colSize: Math.ceil(list.length / numColumns),
+  rowSize: numColumns,
 });
 
-const getRowSize = ({ list, colSize }:{
+const splitListIntoRows = ({ list, rowSize, colSize }: {
 
-  list: Array<mixed>,
+  list: Array<any>,
+  rowSize: number,
   colSize: number
 }): {
-  list: Array<mixed>,
-  rowSize: number
-
-} => ({
-  list: list,
-  rowSize: Math.ceil(list.length / colSize)
-});
-
-const splitListIntoRows = ({ list, rowSize }: {
-
-  list: Array<mixed>,
-  rowSize: number
-}): {
-  shape: Array<mixed>,
-  rowSize: number
+  shape: Array<Array<any>>,
+  colSize: number
 
 } => {
 
   let rowList = [];
 
-  for (let i = 0; i < rowSize; i++) {
+  for (let i = 0; i < colSize; i++) {
 
     const rowStart = i * rowSize;
     const rowFin = i * rowSize + rowSize;
@@ -47,20 +36,18 @@ const splitListIntoRows = ({ list, rowSize }: {
 
   return ({
     shape: rowList,
-    rowSize: rowSize
+    colSize: colSize
     });
 }
 
 const createRowDataShape = compose(
-
   splitListIntoRows,
-  getRowSize,
-  getColumnSize
+  getColSize
 )
 
 export default (list: Array<any>, numColumns: number): {
-  shape: Array<mixed>,
-  rowSize: number
+  shape: Array<Array<any>>,
+  colSize: number
   } => (
 
   createRowDataShape(list, numColumns)

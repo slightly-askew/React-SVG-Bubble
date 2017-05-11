@@ -17,7 +17,7 @@ import type defaultBubbleConfig from './types';
 
 const defaultConfig : defaultBubbleConfig = {
   characterWidth: 10, //future - check Dom node for length of text
-  minTextWidth: 108,
+  minTextWidth: 72,
   textHeight: 36, // future - check DOM node for height of text.
   textMargin: 9,
   textColumns: 1,

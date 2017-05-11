@@ -5,13 +5,13 @@ import styled from 'styled-components';
 import { pure } from 'recompose';
 
 //css
-export default pure(styled.g`
+export const TextGroup = pure(styled.g`
 
   font-size: 18px;
   font-family: 'Fira Mono';
   fill: black;
   letter-spacing: -0.8px;
-  opacity: 0;
+  opacity: 0.8;
   transition: opacity 0.2s;
   will-change: opacity;
 

@@ -3,10 +3,11 @@
 //type def
 
 
-export default function ({dimensions, origin = [0,0]}:{
+export default function (
   dimensions: {'x': number, 'y': number},
-  origin: [number,number]
-}):number {
+  origin: {'x': number, 'y': number} = {'x': 0, 'y': 0}
+
+):number {
 
   const longestDistanceFromAxisEdge = (length, origin) => (
 
@@ -15,7 +16,7 @@ export default function ({dimensions, origin = [0,0]}:{
 
   const plotAxisLength = (i: number): number => (
 
-    i === 0 ? //check if 1st or 2nd number of a coordinate tuple
+    i === 0 ?
     dimensions['x'] :
     dimensions['y']
   );
@@ -25,19 +26,31 @@ export default function ({dimensions, origin = [0,0]}:{
     longestDistanceFromAxisEdge(plotAxisLength(i), a)
   );
 
-  const plotDistanceFromAxis = (a:number, i:number):number => (
+  const plotDistanceFromAxis = (a, i):number => (
 
     calculateDistance(i,a)
   );
 
-  const plotDistances: Array<number> = origin.map(plotDistanceFromAxis);
+  const originValues = Object.values(origin);
+
+
+  const refineNum = (vals) => vals.map(n => {
+    if (typeof n === 'number') {
+      return n
+    }
+    return NaN
+  })
+
+  const coords = refineNum(originValues);
+
+  const distances: Array<number> = coords.map(plotDistanceFromAxis);
 
   const squareDistances = (acc, d) => (
 
     acc + d * d
   );
 
-  const distancesSquared = plotDistances.reduce(squareDistances);
+  const distancesSquared = distances.reduce(squareDistances,0);
 
   const hypotenuse = Math.sqrt(distancesSquared);
 

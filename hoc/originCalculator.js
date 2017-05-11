@@ -12,6 +12,7 @@ export default ({
   textboxOrigin,
   textGrid,
   dividerGrid,
+  maskOrigin,
   ...props
 }:{
   transforms: {
@@ -32,13 +33,23 @@ export default ({
     x: number[],
     y: number[]
   },
+  maskOrigin: {
+    x: number,
+    y: number
+  }
 }):{} => {
 
-  const { morph, flipText } = transforms
+  const { morph, flipText, flip, offset } = transforms
 
   const orientate = compose(
-    morph,
-    flipText
+    flipText,
+    morph
+  )
+
+  const orientateMask = compose(
+    flip,
+    offset,
+    morph
   )
 
   const firstOrigin = orientate(textboxOrigin);
@@ -47,13 +58,15 @@ export default ({
 
   const textOrigins = mapToBox(textGrid);
   const dividerOrigins = mapToBox(dividerGrid);
+  const newMaskOrigin = orientateMask(maskOrigin)
 
   return (
     Object.assign({},
       {...props},
       { transforms: transforms },
       { textOrigins: textOrigins },
-      { dividerOrigins: dividerOrigins }
+      { dividerOrigins: dividerOrigins },
+      { maskOrigin: newMaskOrigin }
     )
   )
 

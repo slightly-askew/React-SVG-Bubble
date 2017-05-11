@@ -18,11 +18,11 @@ const getWidthOffset = (
   textWidth - min : 0
 )
 
-export default (props) => (
-
-  Object.assign({}, props, {
-    pathOffsets : {
-      x: getWidthOffset(props.minTextWidth, props.textDimensions.x),
-      y: props.textDimensions.y,
-    }
-}))
+export default (props: Props) => (
+    Object.assign({}, props, {
+      pathOffsets : {
+        x: getWidthOffset(props.minTextWidth, props.textDimensions.x),
+        y: props.textDimensions.y,
+      }
+  })
+  )

@@ -7,7 +7,7 @@ type coordinates = {
   'y': number
 }
 
-export default styled.rect`
+export const Divider = styled.rect`
 
   fill: black;
 

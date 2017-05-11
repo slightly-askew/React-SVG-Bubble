@@ -1,12 +1,12 @@
 //@flow
 
-import { morph, flip, offsetPath, flipPosition } from './transforms';
+import { morph, flip, offsetPath, flipPosition } from '../transforms';
+import diffDimensions from '../helpers/diffDimensions'
 
 type Coord = {
   'x': number,
   'y': number
 }
-
 
 const getPosTuple = (string: string): string[] => (
 
@@ -14,23 +14,25 @@ const getPosTuple = (string: string): string[] => (
 );
 
 const addMorph = (positions: string[]) => (coordinates: Coord): Coord  => {
-  if (positions[0] === ('left' || 'right')) {
+  if (positions[0] === 'left' || positions[0] === 'right') {
     return morph(coordinates)
   }
   return coordinates
 }
 
-
-const addFlips = (direction:string) => (flipFunc: (*)=>(*)) => (coordinates: Coord): Coord => {
-
+const addFlips = (direction:string) => (flipFunc) => (coordinates: Coord): Coord => {
   switch (direction) {
-    case 'top-left' || 'right-bottom':
+
+    case 'top-left':
+    case 'right-bottom':
       return flipFunc('x')(coordinates)
 
-    case 'bottom-left' || 'right-top':
+    case 'bottom-left':
+    case 'right-top':
       return flipFunc('x','y')(coordinates)
 
-    case 'bottom-right' || 'left-top':
+    case 'bottom-right':
+    case 'left-top':
       return flipFunc('y')(coordinates)
 
     default:
@@ -40,32 +42,65 @@ const addFlips = (direction:string) => (flipFunc: (*)=>(*)) => (coordinates: Coo
 
 export default ({
   speachDirection,
+  svgDimensions,
+  thresholds,
+  pathOffsets,
   ...props
 }: {
   speachDirection: string,
+  svgDimensions: Coord,
+  thresholds: Coord,
+  pathOffsets: Coord,
   props: {
-    svgDimensions: Coord,
-    textDimensions: Coord,
-    pathOffsets: Coord,
-    thresholds: Coord
+    textDimensions: Coord
   }
 }): {} => {
 
   const positions: string[] = getPosTuple( speachDirection );
 
+  const morph = addMorph ( positions )
+
+  const diffs = diffDimensions(svgDimensions, morph(svgDimensions))
+
+  const diffedOffsets = {
+    x: pathOffsets.x - diffs.x,
+    y: pathOffsets.y - diffs.y
+  }
+
+  const morphedDimensions = morph(svgDimensions)
+
+  const diffedDimensions = {
+    x: morphedDimensions.x + diffedOffsets.x,
+    y: morphedDimensions.y + diffedOffsets.y,
+  }
+
+  const morphedThresholds = morph(thresholds)
+
+
   const configuredFlips = addFlips( speachDirection )
 
-  const axisFlip = flip( props.svgDimensions )
+  const axisFlip = flip( diffedDimensions )
 
-  const textFlip = flipPosition( props.svgDimensions, props.textDimensions )
+  const textFlip = flipPosition(
+    diffedDimensions,
+    props.textDimensions)
 
   const transforms = {
     flip: configuredFlips( axisFlip),
-    morph: addMorph( positions ),
+    morph: morph,
     flipText: configuredFlips( textFlip ),
-    offset: offsetPath( props.pathOffsets, props.thresholds )
+    offset: offsetPath(
+      diffedOffsets,
+      morphedThresholds
+    )
   }
 
-  return Object.assign({}, { ...props }, { speachPositions: positions }, { transforms: transforms })
+  return Object.assign({},
+    { ...props },
+    { thresholds: morphedThresholds },
+    { transforms: transforms },
+    { pathOffsets: diffedOffsets },
+    { svgDimensions: diffedDimensions },
+  )
 
 }

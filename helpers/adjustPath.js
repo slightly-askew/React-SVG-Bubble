@@ -1,38 +1,47 @@
 //@flow
 
-type standardPath = [string, [number,number]]
-type curvedPath = ["C", Array<number>]
 
-export type flatPathData = Array< curvedPath | standardPath >
+export type flatPathData = Array<any>
+
+type coordinates = {
+  'x': number,
+  'y': number
+}
 
 const checkString = (s:mixed):string => (
   typeof s === 'string' ?
   s : ''
 )
 
+const prepareCoords = (adjustment: () => coordinates) => (tuple: number[]): string => (
 
+  Object.values(adjustment({
+    x: tuple[0],
+    y: tuple[1]
+  })).join(' ')
+)
 
-const processPath = (p: flatPathData) => (adjustments) => {
-  const { adjustX , adjustY } = adjustments;
-    switch (p[0]) {
-      case "C":
-        return `C${p[1].map(c => `${adjustX(c[0])},${adjustY(c[1])}`).join(' ')}`;
-      case "L":
-        return `${p[0]}${adjustX(p[1][0])} ${adjustY(p[1][1])}`;
-      case "M":
-        return `${p[0]}${adjustX(p[1][0])} ${adjustY(p[1][1])}`;
-      default:
-        return `${checkString(p[0])}`;
-    }
+const processPath = (adjustment) => (p: flatPathData) => {
+
+  const process = prepareCoords(adjustment);
+
+  switch (p[0]) {
+    case "C":
+      return `C${p[1].map(c => process(c)).join(' ')}`;
+    case "L":
+      return `L${process(p[1])}`;
+    case "M":
+      return `M${process(p[1])}`;
+    default:
+      return `${checkString(p[0])}`;
   }
-
-export default function returnPath (
-  adjustments: Adjustments) {
-
-  return (
-    function ( pathAry: string[][] ): Array<*> {
-
-      const adjustedPath = processPath(adjustments);
-      return pathAry.map(adjustedPath)
-  })
 }
+
+export default (adjustment: () => coordinates) => (
+
+  (pathAry: flatPathData): string[] => {
+
+      const adjustedPath = processPath(adjustment);
+      return pathAry.map(adjustedPath)
+  }
+)

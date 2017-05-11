@@ -6,45 +6,42 @@ import { onlyUpdateForKeys } from 'recompose';
 
 //files
 import findRadius from '../helpers/findRadius';
-import alterCoordinates from '../helpers/alterCoordinates';
 
-
-//type
 type props = {
-  dimensions: {'x': number, 'y': number},
-  origin: {'x': number, 'y': number},
-  isActive: boolean
+  maskOrigin: {
+    'x': number,
+    'y': number
+  },
+  svgDimensions: {
+    'x': number,
+    'y': number
+  }
 }
 
 
-//hoc
-const enhance: ()=>Class<React$Component<*>> = onlyUpdateForKeys(['dimensions', 'origin', 'isActive']);
+export const Circle = styled.circle.attrs({
 
-export default enhance(styled.circle`
+  className: 'bubble__mask'
+})`
 
     fill: white;
     transform: scale(0);
     will-change: transform;
     transition: transform 0.2s ease-out 0.1s;
 
-    ${({dimensions, origin, ...props}: props):string => {
+    ${({maskOrigin, svgDimensions}: props):string => {
 
-      const newOrigin = alterCoordinates(dimensions, props)(origin);
+      console.log(maskOrigin)
 
-      const cx = newOrigin['x'];
-      const cy = newOrigin['y'];
+      const cx = maskOrigin.x;
+      const cy = maskOrigin.y;
 
       return `
 
         cx: ${cx};
         cy: ${cy};
-        r: ${findRadius(dimensions, [cx,cy])};
-        transform-origin: ${cx}px ${cy}px
+        r: ${findRadius(svgDimensions, maskOrigin)};
+        transform-origin: ${cx}px ${cy}px;
 
     `}}
-
-    ${({isActive}: props) => `
-
-      transform: scale(1)
-    `}
-`)
+`

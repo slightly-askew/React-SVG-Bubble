@@ -3,7 +3,7 @@
 //vendor
 import styled from 'styled-components';
 
-export default styled.g`
+export const TextComponent = styled.g`
   cursor: pointer;
   &:hover {
     & rect {

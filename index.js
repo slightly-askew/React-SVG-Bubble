@@ -1,5 +1,5 @@
 //@flow
-
+import React from 'react';
 //vendor
 import { compose } from 'recompose';
 
@@ -10,8 +10,10 @@ import offsetCalculator from './hoc/offsetCalculator';
 import transformCalculator from './hoc/transformCalculator';
 import textCalculator from './hoc/textCalculator';
 import originCalculator from './hoc/originCalculator';
+import pathCalculator from './hoc/pathCalculator';
 
 const addData = compose(
+  pathCalculator,
   originCalculator,
   transformCalculator,
   offsetCalculator,
@@ -19,4 +21,11 @@ const addData = compose(
   applyConfig
 )
 
-export default addData(Bubble);
+export default (props) => {
+
+  const newProps = (addData(props));
+  console.log(newProps)
+  return (
+    <Bubble {...newProps}>{props.children}</Bubble>
+  )
+}
