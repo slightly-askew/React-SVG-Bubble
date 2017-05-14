@@ -12,6 +12,11 @@ import textCalculator from './hoc/textCalculator';
 import originCalculator from './hoc/originCalculator';
 import pathCalculator from './hoc/pathCalculator';
 
+type coordinates = {
+  'x': number,
+  'y': number
+}
+
 const addData = compose(
   pathCalculator,
   originCalculator,
@@ -21,11 +26,24 @@ const addData = compose(
   applyConfig
 )
 
-export default (props) => {
+export default (props: {
+  children: {},
+  dividerOrigins: coordinates[],
+  dividerWidth: number,
+  textDimensions: coordinates,
+  pathData: string,
+  mask: string,
+  textOrigins: coordinates[],
+  textWidths: number[],
+  isActive: boolean,
+  textItems: Array<{
+    label: string,
+    target: string
+  }>
+}) => (
 
-  const newProps = (addData(props));
-  console.log(newProps)
-  return (
-    <Bubble {...newProps}>{props.children}</Bubble>
-  )
-}
+  <Bubble {...addData(props)}>
+    {props.children}
+  </Bubble>
+
+)
