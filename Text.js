@@ -29,7 +29,6 @@ export default ({
 
       const origin = textOrigins[i];
       const width = textWidths[i]
-      console.log(origin);
 
       return (
         <TextComponent key={i} isActive={isActive} target={child.target}>

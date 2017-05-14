@@ -29,6 +29,7 @@ export default (props: {
     target: string
   }>
 }) => {
+  console.log(props);
   return(
     <Svg {...props}>
       <mask id='circleMask'>

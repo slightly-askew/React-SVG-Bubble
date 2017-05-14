@@ -52,7 +52,7 @@ export default ({
     morph
   )
 
-  const firstOrigin = orientate(textboxOrigin);
+  const firstOrigin = orientate(morph(textboxOrigin));
 
   const mapToBox = mapOrigins(firstOrigin);
 

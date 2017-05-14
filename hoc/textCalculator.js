@@ -26,8 +26,6 @@ type Props = {
 export default (props: Props) => {
 
     const checkItemAgainstMax = (i:number, max: number): number => {
-      console.log(i)
-      console.log(max)
       return (
         Math.max((!!max ? max : 0),(i ? i : 0))
       )
