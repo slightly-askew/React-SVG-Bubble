@@ -25,34 +25,31 @@ type Props = {
 
 export default (props: Props) => {
 
-    // Width
-    const checkItemAgainstMax = (i:number,max: number):number => (
-      Math.max((!!max ? max : 0),i)
-    );
+    const checkItemAgainstMax = (i:number, max: number): number => {
+      console.log(i)
+      console.log(max)
+      return (
+        Math.max((!!max ? max : 0),(i ? i : 0))
+      )
+    };
 
-    const measureLongestItemInColumns = (
-      (acc:number[], row:number[], i, a) => {
-
-        return row.map((col, i) => (
-          acc[i] = checkItemAgainstMax(col, acc[i])
-    ))})
-
-
-    const columnSizes: number[] = new Array(props.textColumns);
-
-    const getMaximumColumnCharCounts = (rowShape:Array<Array<number>>): number[] => (
-      rowShape.reduce(measureLongestItemInColumns, columnSizes)
-    )
+    const getMaximumColumnCount = (rowShape:Array<Array<number>>): number[] => {
+      const columnSizes = new Array(props.textColumns).fill(1);
+      rowShape.map((row) => (
+        row.map((val, i) => (
+          columnSizes[i] = checkItemAgainstMax(val, columnSizes[i])
+        ))
+      ))
+      return columnSizes;
+    }
 
     const childrenAsChars: Array<number> = props.textItems.map(c => c.label.length);
-
     const childrenAsWidths: Array<number> = childrenAsChars.map(c => c * props.characterWidth)
-
     const childrenAsShape = createRowDataShape(childrenAsWidths, props.textColumns)
-
-    const colWidths = getMaximumColumnCharCounts(childrenAsShape.shape);
-
+    const colWidths = getMaximumColumnCount(childrenAsShape.shape);
     const columnMargin = props.textMargin * 3
+
+    console.log(colWidths)
 
     const textOriginsX: Array<number> = colWidths
     .reduce((acc, c, i) => (

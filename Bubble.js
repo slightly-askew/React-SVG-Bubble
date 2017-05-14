@@ -9,8 +9,26 @@ import Text from './Text';
 import Dividers from './Dividers';
 import Path from './Path'
 
+type coordinates = {
+  'x': number,
+  'y': number
+}
 
-export default (props) => {
+export default (props: {
+  children: {},
+  dividerOrigins: coordinates[],
+  dividerWidth: number,
+  textDimensions: coordinates,
+  pathData: string,
+  mask: string,
+  textOrigins: coordinates[],
+  textWidths: number[],
+  isActive: boolean,
+  textItems: Array<{
+    label: string,
+    target: string
+  }>
+}) => {
   return(
     <Svg {...props}>
       <mask id='circleMask'>
@@ -18,8 +36,8 @@ export default (props) => {
         <Circle {...props} />
       </mask>
       <Path {...props} mask="url(#circleMask)"/>
-      <Text {...props}>{props.children}</Text>
-      <Dividers {...props}/>
+      <Text {...props} mask="url(#circleMask)">{props.children}</Text>
+      <Dividers mask="url(#circleMask)" {...props}/>
     </Svg>
   )
 }
