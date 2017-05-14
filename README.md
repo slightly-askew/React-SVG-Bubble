@@ -1,15 +1,15 @@
-#React SVG Bubble
+# React SVG Bubble
 
 A dropdown/tooltip-style navigation component in a fluid svg container.
 
-####Props
+#### Props
 
-#####speechDirection
+##### speechDirection
 
 Sets the location of the focal point of the speech bubble.
 Choose from: 'top-right', 'top-left', 'right-top', 'right-bottom', 'bottom-right', 'bottom-left', 'left-bottom', 'left-top' Set to top-right by default.
 
-#####characterWidth
+##### characterWidth
 
 ```jsx
 
@@ -19,7 +19,7 @@ Choose from: 'top-right', 'top-left', 'right-top', 'right-bottom', 'bottom-right
 
 Size in px of the average character width. Defaults to 10.
 
-#####minTextWidth
+##### minTextWidth
 
 ```jsx
 
@@ -29,7 +29,7 @@ Size in px of the average character width. Defaults to 10.
 
 Minimum total width of the text area. Off by default.
 
-#####textHeight
+##### textHeight
 
 ```jsx
 
@@ -39,7 +39,7 @@ Minimum total width of the text area. Off by default.
 
 Height in px of text. Defaults to 36.
 
-#####textMargin
+##### textMargin
 
 ```jsx
 
@@ -49,7 +49,7 @@ Height in px of text. Defaults to 36.
 
 Vertical leading space in px. Defaults to 9.
 
-#####textColumns
+##### textColumns
 
 ```jsx
 
@@ -59,7 +59,7 @@ Vertical leading space in px. Defaults to 9.
 
 The number of columns which text should be divided into. Defaults to 1.
 
-#####svgDimensions
+##### svgDimensions
 
 ```jsx
 
@@ -69,7 +69,7 @@ The number of columns which text should be divided into. Defaults to 1.
 
 The viewbox dimensions of the SVG background.
 
-#####maskOrigin
+##### maskOrigin
 
 ```jsx
 
@@ -79,7 +79,7 @@ The viewbox dimensions of the SVG background.
 
 The origin of the circular mask which creates an open/close transition.
 
-#####thresholds
+##### thresholds
 
 ```jsx
 
@@ -89,7 +89,7 @@ The origin of the circular mask which creates an open/close transition.
 
 The minimum coordinate value at which offsets will be applied to the background SVG path in order to fit around the text. This is needed to avoid skewing the original path details, such as the corners or speech bubble focal point.
 
-#####dividerWidth
+##### dividerWidth
 
 ```jsx
 
@@ -99,7 +99,7 @@ The minimum coordinate value at which offsets will be applied to the background 
 
 When multiple columns are specified - set the width of the vertical dividing line. Defaults to 2.5
 
-#####textboxOrigin
+##### textboxOrigin
 
 ```jsx
 
@@ -109,7 +109,7 @@ When multiple columns are specified - set the width of the vertical dividing lin
 
 Origin coordinates of the text group.
 
-####Dependencies
+#### Dependencies
 
 - `"styled-components": "next"`
 - `"react": "^15.5.0"`
