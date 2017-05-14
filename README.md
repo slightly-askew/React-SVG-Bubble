@@ -4,7 +4,7 @@ A dropdown/tooltip-style navigation component in a fluid svg container.
 
 use it as a drop-down:
 
-![Alt text](.gif/Bubble1.gif?raw=true "Title")
+![Alt text](gif/Bubble1.gif?raw=true "Title")
 
 
 
