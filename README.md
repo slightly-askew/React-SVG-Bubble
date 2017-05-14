@@ -4,7 +4,11 @@ A dropdown/tooltip-style navigation component in a fluid svg container.
 
 use it as a drop-down:
 
-![Alt text](gif/Bubble1.gif?raw=true "Title")
+![1 column, top-right position](gif/Bubble1.gif?raw=true "Title")
+
+or in a tool-tip style, with your choice of columns:
+
+![3 columns, left-bottom position](gif/Bubble2.gif?raw=true "Title")
 
 
 
